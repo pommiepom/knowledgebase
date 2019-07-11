@@ -1,18 +1,19 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+
 mongoose.set('useFindAndModify', false);
 
 const commentSchema = Schema({
     postID: {
         // type: mongoose.Schema.Types.ObjectId, 
-        type: String,
-        // ref: 'Post',
+        type: String, 
+        ref: 'Post',
         require: true
     },
     createdBy: {
         // type: mongoose.Schema.Types.ObjectId, 
-        type: String,
-        // ref: 'User',
+        type: String, 
+        ref: 'User',
         require: true
     },    
     message: {
@@ -21,7 +22,7 @@ const commentSchema = Schema({
     },
     date: {
         type: Date,
-        default: Date.now(),
+        default: null,
         require: true
     },
     deleted: {
@@ -30,10 +31,9 @@ const commentSchema = Schema({
         require: true
     },
     delDate: {
-        type: Date
-    },
-    id: {
-        type: String
+        type: Date,
+        default: null,
+        require: true
     }
 })
 

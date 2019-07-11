@@ -3,24 +3,22 @@ const Schema = mongoose.Schema
 mongoose.set('useFindAndModify', false);
 
 const schema = Schema({
-    // reportedBy: {
-    //     type: mongoose.Schema.Types.ObjectId, 
-    //     ref: 'User',
-    //     require: true
-    // },
-    // postID: {
-    //     type: mongoose.Schema.Types.ObjectId, 
-    //     ref: 'Post',
-    //     require: true
-    // },
     reportedBy: {
-        type: Number, 
-        // ref: 'User',
+        type: String, 
+        // type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User',
         require: true
     },
     postID: {
-        type: Number, 
-        // ref: 'Post',
+        type: String, 
+        // type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Post',
+        require: true
+    },
+    commentID: {
+        type: String, 
+        // type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Post',
         require: true
     },
     issue: {
@@ -33,7 +31,7 @@ const schema = Schema({
     },
     date: {
         type: Date,
-        default: Date.now(),
+        default: null,
         require: true
     },
     adminEmail: {

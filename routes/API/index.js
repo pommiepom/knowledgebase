@@ -10,7 +10,6 @@ router.use('/comments', require('./Comment'))
 router.use('/posts', require('./Post'))
 router.use('/reports', require('./Report'))
 router.use('/likes', require('./Like'))
-router.use('/registers', require('./Register'))
 router.use('/logins', require('./Login'))
 router.use('/authens', require('./Authen'))
 

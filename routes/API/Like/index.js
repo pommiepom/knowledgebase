@@ -15,19 +15,6 @@ router.get('/', (req, res) => {
 		})
 })
 
-router.get('/:id', (req, res) => {
-	const query = req.params
-	console.log(query);
-	Like.list(query)
-		.then(doc => {
-			res.json(doc);
-		})
-		.catch(err => {
-			console.error(err)
-			res.status(500).json(err)
-		})
-})
-
 router.post('/', (req, res) => {
 	const props = req.body
 	Like.add(props)
@@ -39,7 +26,7 @@ router.post('/', (req, res) => {
 		})
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/del/:_id', (req, res) => {
 	const query = req.params
 	Like.del(query)
 		.then(doc => {

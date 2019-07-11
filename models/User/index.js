@@ -45,11 +45,19 @@ const userSchema = Schema({
         require: true
     },
     remember: {
-        type: Boolean,
-        default: false
+        type: Number,
+        default: 0,
+        require: true
     },
-    id: {
-        type: String
+    deleted: {
+        type: Number,
+        default: 0,
+        require: true
+    },
+    delDate: {
+        type: Date,
+        default: null,
+        require: true
     }
 })
 

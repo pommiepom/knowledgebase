@@ -2,10 +2,13 @@ const express = require('express')
 const router = express.Router()
 
 const Comment = require('../../../controllers/Comment')
+const Like = require('../../../controllers/Like')
 const Likes = require('../../../models/Like')
 
+const moment = require('moment')
+
 router.get('/', (req, res) => {
-	const query = null
+	const query = { deleted: 0 }
 	Comment.list(query)
 		.then(doc => {
 			res.json(doc);
@@ -16,7 +19,7 @@ router.get('/', (req, res) => {
 		})
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:_id', (req, res) => {
 	const query = req.params
 	Comment.list(query)
 		.then(doc => {
@@ -39,8 +42,8 @@ router.post('/', (req, res) => {
 		})
 })
 
-router.get('/likes/:id', (req, res) => {
-	const query = { commentID: req.params.id }
+router.get('/likes/:_id', (req, res) => {
+	const query = { commentID: req.params._id }
 	Likes.find(query)
 		// .populate('commentID')
 		// .populate('likedBy')
@@ -53,13 +56,15 @@ router.get('/likes/:id', (req, res) => {
 		})
 })
 
-router.put('/del/:id', (req, res) => {
+router.delete('/del/:_id', (req, res) => {
 	const query = req.params
-	const update = { delDate: Date.now(), deleted: 1}
+	const update = { deleted: 1, delDate: moment().format('YYYY-MM-DD HH:mm:ss')}
 
-	Comment.del(query, update)
-		.then(doc => {
-			console.log(doc);
+	const delComment = Comment.del(query, update)
+	const delLike = Like.del({ commentID: query._id })
+
+	Promise.all([delComment, delLike])
+		.then(doc => {		
 			res.json(doc);
 		})
 		.catch(err => {
@@ -67,26 +72,5 @@ router.put('/del/:id', (req, res) => {
 			res.status(500).json(err)
 		})
 })
-
-// router.delete('/:_id', (req, res) => {
-// 	var query = req.params
-// 	Comment.del(query)
-// 		.then(doc => {		
-// 			res.json(doc);
-// 		})
-// 		.catch(err => {
-// 			console.error(err)
-// 			res.status(500).json(err)
-// 		})
-// 	query = { commentID: query._id }
-// 	Like.del(query)
-// 	.then(doc => {
-// 			res.json(doc);
-// 		})
-// 		.catch(err => {
-// 			console.error(err)
-// 			res.status(500).json(err)
-// 		})
-// })
 
 module.exports = router

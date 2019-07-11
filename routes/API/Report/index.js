@@ -17,6 +17,7 @@ router.get('/', (req, res) => {
 
 router.get('/:_id', (req, res) => {
 	const query = req.params
+	console.log(query);
 	Report.list(query)
 		.then(doc => {
 			res.json(doc);

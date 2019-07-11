@@ -1,10 +1,12 @@
 const express = require('express')
 const router = express.Router()
 
+var moment = require('moment')
 const User = require('../../../controllers/User')
 
 router.get('/', (req, res) => {
-	User.list()
+	const query = { deleted: 0 }	
+	User.list(query)
 		.then(doc => {
 			res.json(doc);
 		})
@@ -14,7 +16,7 @@ router.get('/', (req, res) => {
 		})
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:_id', (req, res) => {
 	const query = req.params
 	User.list(query)
 		.then(doc => {
@@ -26,7 +28,7 @@ router.get('/:id', (req, res) => {
 		})
 })
 
-router.post('/', (req, res) => {
+router.post('/registers', (req, res) => {
 	const props = req.body
 	User.add(props)
 		.then(doc => {
@@ -37,11 +39,27 @@ router.post('/', (req, res) => {
 		})
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:_id', (req, res) => {
 	const query = req.params
 	const update = req.body
 	User.update(query, update)
 		.then(doc => {
+			res.json(doc);
+		})
+		.catch(err => {
+			console.error(err)
+			res.status(500).json(err)
+		})
+})
+
+router.delete('/del/:_id', (req, res) => {
+	const query = req.params
+	console.log(query);
+	const update = { delDate: moment().format('YYYY-MM-DD HH:mm:ss'), deleted: 1}
+
+	User.del(query, update)
+		.then(doc => {
+			console.log(doc)
 			res.json(doc);
 		})
 		.catch(err => {

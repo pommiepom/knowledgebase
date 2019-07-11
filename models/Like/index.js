@@ -1,31 +1,29 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+
 mongoose.set('useFindAndModify', false);
 
 const likeSchema = Schema({
     postID: {
-        // type: mongoose.Schema.Types.ObjectId, 
-        type: String,
-        // ref: 'Post'
+		// type: mongoose.Schema.Types.ObjectId, 
+        type: String, 
+        ref: 'Post'
     },
     commentID: {
-        // type: mongoose.Schema.Types.ObjectId, 
-        type: String,
-        // ref: 'Comment'
+		// type: mongoose.Schema.Types.ObjectId, 
+        type: String, 
+        ref: 'Comment'
     },    
     likedBy: {
-        // type: mongoose.Schema.Types.ObjectId, 
-        type: String,
-        // ref: 'User',
+		// type: mongoose.Schema.Types.ObjectId, 
+        type: String, 
+        ref: 'User',
         require: true
     },
     date: {
         type: Date,
-        default: Date.now(),
+        default: null,
         require: true
-    },
-    id: {
-        type: String
     }
 })
 

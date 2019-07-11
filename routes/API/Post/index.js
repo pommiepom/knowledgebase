@@ -2,13 +2,21 @@ const express = require('express')
 const router = express.Router()
 
 const Post = require('../../../controllers/Post')
+const Like = require('../../../controllers/Like')
+const Comment = require('../../../controllers/Comment')
 const Comments = require('../../../models/Comment')
 const Likes = require('../../../models/Like')
 
+var moment = require('moment');
+
 router.get('/', (req, res) => {
-	const query = null	
+	const query = { deleted: 0 }	
 	Post.list(query)
 		.then(doc => {
+			// var time = []
+			// for(i = 0; i<doc.length; i++) {
+			// 	time.push({_id: doc[i]._id, createdTime: moment(doc[i].createdTime).format('YYYY-MM-DD HH:mm:ss')})
+			// }
 			res.json(doc);
 		})
 		.catch(err => {
@@ -17,11 +25,10 @@ router.get('/', (req, res) => {
 		})
 })
 
-router.get('/:id', (req, res) => {
+router.get('/:_id', (req, res) => {
 	const query = req.params
 	Post.list(query)
 		.then(doc => {
-			// console.log(doc);
 			res.json(doc);
 		})
 		.catch(err => {
@@ -41,7 +48,7 @@ router.post('/', (req, res) => {
 		})
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:_id', (req, res) => {
 	const query = req.params
 	const update = req.body
 	Post.update(query, update)
@@ -54,17 +61,17 @@ router.put('/:id', (req, res) => {
 		})
 })
 
-router.delete('/del/:id', (req, res) => {
-	const query = req.params
-	console.log(query);
-	const update = { delDate: Date.now(), deleted: 1}
+router.delete('/del/:_id', (req, res) => {
+	const query = req.params //post _id
+	const query2 = { postID: query._id } //postID
+	const update = { delDate: moment().format('YYYY-MM-DD HH:mm:ss'), deleted: 1}
 
 	const delPost = Post.del(query, update)
-	const delComment = Comments.del({ postID: query.id }, update)
+	const delLike = Like.del(query2)
+	const delComment = Comment.delAll(query2, update)
 
-	Promise.all([delPost, delComment])
+	Promise.all([delPost, delLike, delComment])
 		.then(doc => {
-			console.log(doc)
 			res.json(doc);
 		})
 		.catch(err => {
@@ -73,9 +80,8 @@ router.delete('/del/:id', (req, res) => {
 		})
 })
 
-router.get('/comments/:id', (req, res) => {
-	const query = { postID: req.params.id }
-	console.log(query);
+router.get('/comments/:_id', (req, res) => {
+	const query = { postID: req.params._id, deleted: 0 }
 	Comments.find(query)
 		// .populate('postID')
 		// .populate('createdBy')
@@ -88,25 +94,10 @@ router.get('/comments/:id', (req, res) => {
 		})
 })
 
-router.get('/likes/:id', (req, res) => {
-	const query = { postID: req.params.id }
+router.get('/likes/:_id', (req, res) => {
+	const query = { postID: req.params._id }
 	Likes.find(query)
 		// .populate('commentID')
-		// .populate('likedBy')
-		.then(doc => {
-			res.json(doc);
-		})
-		.catch(err => {
-			console.error(err)
-			res.status(500).json(err)
-		})
-})
-
-router.delete('/likes/:id', (req, res) => {
-	const query = { postID: req.params.id }
-	console.log(query);
-	Likes.find(query)
-		// .populate('postID')
 		// .populate('likedBy')
 		.then(doc => {
 			res.json(doc);
