@@ -1,9 +1,8 @@
-const Report = require('../../models/Report')
-
+const Reports = require('../../models/Report')
 const moment = require('moment')
 
 exports.add = add = (props) => {
-    const report = new Report({
+    const report = new Reports({
         reportedBy: props.reportedBy,
         postID: props.postID,
         commentID: props.commentID,
@@ -11,12 +10,11 @@ exports.add = add = (props) => {
         description: props.description,
         date: moment().format('YYYY-MM-DD HH:mm:ss')
     })
-    console.log(moment().format('YYYY-MM-DD HH:mm:ss')); 
     return report.save()
 }
 
 exports.list = list = (query) => {
-    return Report.find(query)
+    return Reports.find(query)
     // .populate('reportedBy')
     // .populate('postID')
     .exec()

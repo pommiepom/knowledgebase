@@ -11,7 +11,7 @@ const userSchema = Schema({
         type: String,
         required: true
     },
-    name: {
+    firstname: {
         type: String,
         required: true
     },
@@ -19,26 +19,11 @@ const userSchema = Schema({
         type: String,
         required: true
     },
-    displayname: {
-        type: String,
-        required: true
-    },
-    birthDate: {
-        type: Date,
-        require: true
-    },
     email: {
         type: String,
         required: true
     },
-    // profilePic: {
-    //     data: Buffer,
-    //     contentType: String
-    // },
-    aboutme: {
-        type: String
-    },
-    level: {
+    role: {
         type: String,
         enum : ['user','admin'],
         default: 'user',

@@ -1,21 +1,19 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-mongoose.set('useFindAndModify', false);
+// mongoose.set('useFindAndModify', false);
 
 const commentSchema = Schema({
     postID: {
-        // type: mongoose.Schema.Types.ObjectId, 
         type: String, 
         ref: 'Post',
         require: true
     },
     createdBy: {
-        // type: mongoose.Schema.Types.ObjectId, 
         type: String, 
         ref: 'User',
         require: true
-    },    
+    },
     message: {
         type: String,
         require: true

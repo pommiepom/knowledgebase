@@ -5,19 +5,16 @@ mongoose.set('useFindAndModify', false);
 const schema = Schema({
     reportedBy: {
         type: String, 
-        // type: mongoose.Schema.Types.ObjectId, 
         ref: 'User',
         require: true
     },
     postID: {
         type: String, 
-        // type: mongoose.Schema.Types.ObjectId, 
         ref: 'Post',
         require: true
     },
     commentID: {
         type: String, 
-        // type: mongoose.Schema.Types.ObjectId, 
         ref: 'Post',
         require: true
     },

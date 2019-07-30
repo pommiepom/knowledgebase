@@ -1,28 +1,26 @@
-const User = require('../../models/User')
-var moment = require('moment')
+const Users = require('../../models/User')
+const moment = require('moment')
 
 exports.add = add = (props) => {
-    const user = new User({
+    const user = new Users({
         username: props.username,
         password: props.password,
-        name: props.name,
+        firstname: props.firstname,
         lastname: props.lastname,
-        displayname: props.name + " " + props.lastname,
         email: props.email,
-        level: props.level
-        // id: props.id
+        role: props.role
     })
     return user.save()
 }
 
 exports.list = list = (query) => {
-    return User.find(query).exec()
+    return Users.find(query).exec()
 }
 
 exports.update = update = (query, update) => {
-    return User.findOneAndUpdate(query, { $set: update, lastUpdate: moment().format('YYYY-MM-DD HH:mm:ss') })
+    return Users.findOneAndUpdate(query, { $set: update, lastUpdate: moment().format('YYYY-MM-DD HH:mm:ss') })
 }
 
 exports.del = del = (query, update) => {
-    return User.findOneAndUpdate(query, { $set: update }, { new: true })    
+    return Users.findOneAndUpdate(query, { $set: update }, { new: true })    
 }

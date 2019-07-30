@@ -5,15 +5,14 @@ mongoose.set('useFindAndModify', false);
 
 const postSchema = Schema({
 	createdBy: {
-		// type: mongoose.Schema.Types.ObjectId, 
 		type: String, 
 		ref: 'User',
 		require: true
 	},
 	createdTime: {
 		type: Date,
-		default: null
-		// require: true
+		default: null,
+		require: true
 	},
 	lastUpdate: {
 		type: Date,
@@ -31,6 +30,10 @@ const postSchema = Schema({
 	category: {
 		type: String
 	},
+	fileID: [{
+		type: String,
+		ref: 'File'
+	}],
 	deleted: {
 		type: Number,
 		default: 0,
@@ -41,10 +44,6 @@ const postSchema = Schema({
 		default: null,
 		require: true
 	}
-	// attachment : [{
-	//     data: Buffer, 
-	//     contentType: String
-	// }]
 })
 
 module.exports = mongoose.model('Post', postSchema)

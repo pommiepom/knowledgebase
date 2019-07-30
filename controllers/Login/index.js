@@ -1,5 +1,5 @@
-const Login = require('../../models/User')
+const Logins = require('../../models/User')
 
 exports.check = check = (username) => {
-    return Login.findOne({ username: username}, 'password').exec()
+	return Logins.findOne({ username: username }, 'password role').exec()
 }

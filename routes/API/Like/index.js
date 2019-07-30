@@ -2,9 +2,11 @@ const express = require('express')
 const router = express.Router()
 
 const Like = require('../../../controllers/Like')
+const authen = require('../../../middlewares/Authentication.js')
 
-router.get('/', (req, res) => {
-	const query = null	
+router.get('/', authen.admin, (req, res) => {
+	const query = null
+
 	Like.list(query)
 		.then(doc => {
 			res.json(doc);
@@ -15,8 +17,22 @@ router.get('/', (req, res) => {
 		})
 })
 
-router.post('/', (req, res) => {
+router.get('/:_id', authen.admin, (req, res) => {
+	const query = req.params
+
+	Like.list(query)
+		.then(doc => {
+			res.json(doc);
+		})
+		.catch(err => {
+	 		console.error(err)
+			res.status(500).json(err)
+		})
+})
+
+router.post('/', authen.user, (req, res) => {
 	const props = req.body
+
 	Like.add(props)
 		.then(doc => {
 			res.json(doc)
@@ -26,8 +42,9 @@ router.post('/', (req, res) => {
 		})
 })
 
-router.delete('/del/:_id', (req, res) => {
+router.delete('/:_id', authen.user, (req, res) => {
 	const query = req.params
+	
 	Like.del(query)
 		.then(doc => {
 			res.json(doc);

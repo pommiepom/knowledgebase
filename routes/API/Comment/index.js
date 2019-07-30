@@ -1,26 +1,27 @@
 const express = require('express')
 const router = express.Router()
+const moment = require('moment')
 
 const Comment = require('../../../controllers/Comment')
 const Like = require('../../../controllers/Like')
-const Likes = require('../../../models/Like')
+const authen = require('../../../middlewares/Authentication.js')
 
-const moment = require('moment')
-
-router.get('/', (req, res) => {
+router.get('/', authen.admin, (req, res) => {
 	const query = { deleted: 0 }
+
 	Comment.list(query)
 		.then(doc => {
 			res.json(doc);
 		})
-		.catch(err => {
+		.catch( err => {
 			console.error(err)
 			res.status(500).json(err)
 		})
 })
 
-router.get('/:_id', (req, res) => {
+router.get('/:_id', authen.admin, (req, res) => {
 	const query = req.params
+
 	Comment.list(query)
 		.then(doc => {
 			res.json(doc);
@@ -31,8 +32,9 @@ router.get('/:_id', (req, res) => {
 		})
 })
 
-router.post('/', (req, res) => {
+router.post('/', authen.user, (req, res) => {
 	const props = req.body
+
 	Comment.add(props)
 		.then(doc => {
 			res.json(doc)
@@ -42,9 +44,10 @@ router.post('/', (req, res) => {
 		})
 })
 
-router.get('/likes/:_id', (req, res) => {
-	const query = { commentID: req.params._id }
-	Likes.find(query)
+router.get('/:commentID/likes', (req, res) => {
+	const query = req.params
+
+	Like.list(query)
 		// .populate('commentID')
 		// .populate('likedBy')
 		.then(doc => {
@@ -56,14 +59,11 @@ router.get('/likes/:_id', (req, res) => {
 		})
 })
 
-router.delete('/del/:_id', (req, res) => {
+router.delete('/:_id', authen.user, (req, res) => {
 	const query = req.params
 	const update = { deleted: 1, delDate: moment().format('YYYY-MM-DD HH:mm:ss')}
 
-	const delComment = Comment.del(query, update)
-	const delLike = Like.del({ commentID: query._id })
-
-	Promise.all([delComment, delLike])
+	Comment.del(query, update)
 		.then(doc => {		
 			res.json(doc);
 		})

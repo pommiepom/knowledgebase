@@ -10,8 +10,9 @@ router.use('/comments', require('./Comment'))
 router.use('/posts', require('./Post'))
 router.use('/reports', require('./Report'))
 router.use('/likes', require('./Like'))
-router.use('/logins', require('./Login'))
-router.use('/authens', require('./Authen'))
+router.use('/files', require('./File'))
+router.use('/login', require('./Login'))
+// router.use('/authens', require('./Authen'))
 
 module.exports = router
 

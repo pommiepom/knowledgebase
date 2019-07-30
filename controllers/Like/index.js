@@ -1,20 +1,18 @@
-const Like = require('../../models/Like')
-
+const Likes = require('../../models/Like')
 const moment = require('moment')
 
 exports.add = add = (props) => {
-    const like = new Like({
+    const like = new Likes({
         postID: props.postID,
         commentID: props.commentID,
         likedBy: props.likedBy,
-        date: moment().format('YYYY-MM-DD HH:mm:ss')
-        // id: props.id
+        date: moment().format('YYYY-MM-DD HH:mm:ss'),
     })
     return like.save()
 }
 
 exports.list = list = (query) => {
-    return Like.find(query)
+    return Likes.find(query)
                 // .populate('postID')
                 // .populate('commentID')
                 // .populate('likedBy')
@@ -22,5 +20,5 @@ exports.list = list = (query) => {
 }
 
 exports.del = del = (query) => {
-    return Like.deleteMany(query)    
+    return Likes.deleteMany(query)    
 }

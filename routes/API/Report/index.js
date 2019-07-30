@@ -2,9 +2,11 @@ const express = require('express')
 const router = express.Router()
 
 const Report = require('../../../controllers/Report')
+const authen = require('../../../middlewares/Authentication.js')
 
-router.get('/', (req, res) => {
-	const query = null	
+router.get('/', authen.admin, (req, res) => {
+	const query = null
+
 	Report.list(query)
 		.then(doc => {
 			res.json(doc);
@@ -15,9 +17,9 @@ router.get('/', (req, res) => {
 		})
 })
 
-router.get('/:_id', (req, res) => {
+router.get('/:_id', authen.admin, (req, res) => {
 	const query = req.params
-	console.log(query);
+
 	Report.list(query)
 		.then(doc => {
 			res.json(doc);
@@ -28,8 +30,9 @@ router.get('/:_id', (req, res) => {
 		})
 })
 
-router.post('/', (req, res) => {
+router.post('/', authen.user, (req, res) => {
 	const props = req.body
+
 	Report.add(props)
 		.then(doc => {
 			res.json(doc)
