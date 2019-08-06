@@ -11,12 +11,21 @@ const Posts = require('../../models/Post')
 // }
 
 exports.add = add = (doc, time) => {
-	var arr = []
-	for (let i = 0; i < doc.length; i++) {
-		arr[i] = { name: doc[i].filename, date: time}
-	}
-	return Files.insertMany(arr);
+	console.log('file.add ', doc);
+	// var arr = []
+	// for (let i = 0; i < doc.length; i++) {
+		const file = { name: doc.filename, date: time}
+	// }
+	return Files.insertMany(file);
 }
+
+// exports.add = add = (doc, time) => {
+// 	var arr = []
+// 	for (let i = 0; i < doc.length; i++) {
+// 		arr[i] = { name: doc[i].filename, date: time}
+// 	}
+// 	return Files.insertMany(arr);
+// }
 
 exports.list = list = (query) => {
 	return Files.find(query)

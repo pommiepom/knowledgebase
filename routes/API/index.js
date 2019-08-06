@@ -12,7 +12,6 @@ router.use('/reports', require('./Report'))
 router.use('/likes', require('./Like'))
 router.use('/files', require('./File'))
 router.use('/login', require('./Login'))
-// router.use('/authens', require('./Authen'))
 
 module.exports = router
 

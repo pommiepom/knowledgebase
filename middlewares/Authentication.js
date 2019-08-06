@@ -19,9 +19,9 @@ const authen = (role) => {
 			if (decoded.role == 'user' & role == 'user') {
 				return next()
 			}
-			res.status(403).json('invalid')
+			res.status(401).json('invalid')
 		} else {
-			res.status(403).json('null token')
+			res.status(401).json('null token')
 		}
 	})
 }

@@ -18,7 +18,7 @@ router.post('/', (req, res) => {
 				if (password == doc.password){					
 					try {
 						let token = jwt.sign({ username: username, role: doc.role }, 'secret', { algorithm: 'HS512'})
-						res.cookie('jwt', token, { maxAge: 1000*60*30 })
+						res.cookie('jwt', token, { maxAge: 1000*60*30  *1000 })
 						res.json('valid')
 					}
 					catch(err) {
