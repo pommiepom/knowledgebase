@@ -1,0 +1,20 @@
+<script src="/axios/axios.min.js"></script>
+<script src="/jquery/jquery.min.js"></script>
+<script src="/public/file.js"></script>
+
+<h1>Post - file</h1>
+<html>
+	<body>
+		<form>
+			Attachment:<br>
+			<input id="file" name="file" type="file" multiple="multiple"><br><br>
+			
+			<button id="addFile" type="button">ADD FILE</button>
+		</form><br><br>
+		<!-- action="/api/posts/${req.params._id}/files/del" method="post" -->
+		<form id="formDelfile">
+			<div id="loopFile">loop file</div><br>
+			<button id="delFile" type="button">DEL FILE</button>
+		</form>
+	</body>
+</html>

@@ -17,7 +17,7 @@ $(function () {
             .then(doc => {
                 console.log(doc);
                 const postID = doc.data._id
-                window.location = "/public/newFile.html?post_id=" + postID
+                window.location = "/public/file.html?post_id=" + postID
                 // window.location = "/public/post/" + postID + "/file"
             })
             .catch(err => {

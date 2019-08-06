@@ -14,15 +14,13 @@ const storage = multer.diskStorage({
 		cb(null, 'D:/2562_1/knowledgebase/uploads')
 	},
 	filename: function (req, file, cb) {
-		cb(null, file.originalname + '-' + time)
+		cb(null, file.originalname + '-' + moment().format('YYYYMMDDHHmmSS'))
 	}
 })
 
-const time = moment().format('YYYYMMDDHHmmSS')
 const upload = multer({
 	storage: storage
 })
-
 
 router.get('/', (req, res) => {
 	const query = {
@@ -63,56 +61,20 @@ router.post('/', authen.user, (req, res) => {
 		})
 })
 
-router.patch('/:_id/file', authen.user, upload.single('file'), (req, res) => {
+router.get('/:_id/filenum', (req, res) => {
 	const query = req.params
-	const lastUpdate = moment().format('YYYY-MM-DD HH:mm:ss')
 
-	File.add(req.file, time)
-		.then(file => {
-			const update = {
-				$push: { fileID: file[0]._id },
-				$set: { lastUpdate: lastUpdate }
-			}
-			console.log('update' , update);
-			return Post.update(query, update)
-		})
+	return Post.list(query)
 		.then(doc => {
-			console.log(doc);
-			res.json(doc)
+			res.status(200).json({
+				filenum: doc[0].fileID.length
+			})
 		})
 		.catch(err => {
-			console.error(err)
+			console.log(err);
 			res.status(500).json(err)
 		})
 })
-
-// router.post('/', authen.user, upload.array('file'), (req, res) => {
-// 	console.log(req.files);
-// 	if (req.files.length < 6 ) {
-// 		File.add(req.files, time)
-// 			.then(doc => {
-// 				const fileID = []
-// 				for (let i = 0; i < doc.length; i++) {
-// 					fileID[i] = doc[i]._id
-// 				}
-// 				req.body['fileID'] = fileID
-
-// 				return Post.add(req.body)
-// 			})
-// 			.then(doc => {
-// 				console.log(doc);
-// 				res.json(doc)
-// 			})
-// 			.catch(err => {
-// 				console.error(err)
-// 				res.status(500).json(err)
-// 			})
-// 	}
-// 	else {
-// 		console.log("can't upload over 5 files");
-// 		res.status(400).json("can't upload over 5 files")		
-// 	}
-// })
 
 router.patch('/:_id', authen.user, (req, res) => {
 	const query = req.params
@@ -205,56 +167,45 @@ router.get('/:_id/files', (req, res) => {
 		})
 })
 
-// router.post('/:_id/files/add', authen.user, upload.array('file'), (req, res) => {
-// 	const query = req.params
-// 	const lastUpdate = moment().format('YYYY-MM-DD HH:mm:ss')
-// console.log(req.files);
-// 	Post.list(req.params)
-// 		.then(doc => {
-// 			if (doc[0].fileID.length + req.files.length > 5) {
-// 				res.status(400).end("can't upload over 5 files")
-// 			} else {
-// 				File.add(req.files, time)
-// 					.then(doc => {
-// 						const fileID = []
-// 						for (let i = 0; i < doc.length; i++) {
-// 							fileID[i] = doc[i]._id
-// 						}
-// 						const update = {
-// 							$push: {
-// 								fileID: fileID
-// 							},
-// 							$set: {
-// 								lastUpdate: lastUpdate
-// 							}
-// 						}
+router.patch('/:_id/file', authen.user, upload.single('file'), (req, res) => {
+	const query = req.params
+	const time = moment().format('YYYYMMDDHHmmSS')
 
-// 						return Post.update(query, update)
-// 					})
-// 					.then(doc => {
-// 						res.json(doc)
-// 					})
-// 					.catch(err => {
-// 						console.error(err)
-// 						res.status(500).json(err)
-// 					})
-// 			}
-// 		})
-// })
+	File.add(req.file, time)
+		.then(file => {
+			const update = {
+				$push: {
+					fileID: file[0]._id
+				},
+				$set: {
+					lastUpdate: time
+				}
+			}
+			return Post.update(query, update)
+		})
+		.then(doc => {
+			console.log(doc);
+			res.json(doc)
+		})
+		.catch(err => {
+			console.error(err)
+			res.status(500).json(err)
+		})
+})
 
-// router.post('/:_id/files/del', authen.user, (req, res) => {
-// 	const post_id = req.params
-// 	const fileID = req.body.file
+router.delete('/:_id/file', authen.user, (req, res) => {
+	const post_id = req.params
+	const fileID = req.body.fileID
 
-// 	File.delandUpdate(fileID, post_id)
-// 		.then(doc => {
-// 			res.json(doc);
-// 		})
-// 		.catch(err => {
-// 			console.error(err)
-// 			res.status(500).json(err)
-// 		})
-// 	console.log("del");
-// })
+	File.delandUpdate(fileID, post_id)
+		.then(doc => {
+			console.log(doc);
+			res.json(doc);
+		})
+		.catch(err => {
+			console.error(err)
+			res.status(500).json(err)
+		})
+})
 
 module.exports = router
