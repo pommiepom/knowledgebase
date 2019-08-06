@@ -1,6 +1,5 @@
 const API = axios.create({
-    baseURL: 'http://localhost:8001/api',
-    timeout: 30000
+    baseURL: 'http://localhost:8001/api'
 })
 
 $(function () {
@@ -30,8 +29,8 @@ $(function () {
             }
         };
         const files = $('#file').prop('files');
-
-        API.get(`/posts/${post_id}/filenum`)
+        if (files.length > 0) {
+            API.get(`/posts/${post_id}/filenum`)
             .then(res => {
                 const filenum = res.data.filenum
                 console.log('count ', filenum + files.length);
@@ -59,6 +58,7 @@ $(function () {
             .catch(err => {
                 console.log(err);
             })
+        }
     })
 
     //del file
@@ -70,21 +70,24 @@ $(function () {
             fileID[i] = $(this).val();
         });
 
-        for (let i = 0; i < fileID.length; i++) {
-            promises.push(API.delete(`/posts/${post_id}/file`, {
-                data: {
-                    fileID: fileID[i]
-                }
-            }))
+        if (fileID.length > 0) {
+            for (let i = 0; i < fileID.length; i++) {
+                promises.push(API.delete(`/posts/${post_id}/file`, {
+                    data: {
+                        fileID: fileID[i]
+                    }
+                }))
+            }
+    
+            Promise.all(promises)
+                .then(doc => {
+                    console.log(doc);
+    
+                    location.reload();
+                })
+                .catch(err => {
+                    console.error(err);
+                })
         }
-
-        Promise.all(promises)
-            .then(doc => {
-                console.log(doc);
-                location.reload();
-            })
-            .catch(err => {
-                console.error(err);
-            })
     })
 })

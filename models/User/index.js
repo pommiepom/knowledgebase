@@ -29,11 +29,6 @@ const userSchema = Schema({
         default: 'user',
         require: true
     },
-    remember: {
-        type: Number,
-        default: 0,
-        require: true
-    },
     deleted: {
         type: Number,
         default: 0,

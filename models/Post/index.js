@@ -9,7 +9,7 @@ const postSchema = Schema({
 		ref: 'User',
 		require: true
 	},
-	createdTime: {
+	date: {
 		type: Date,
 		default: null,
 		require: true

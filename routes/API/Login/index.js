@@ -19,11 +19,11 @@ router.post('/', (req, res) => {
 					try {
 						let token = jwt.sign({ username: username, role: doc.role }, 'secret', { algorithm: 'HS512'})
 						res.cookie('jwt', token, { maxAge: 1000*60*30  *1000 })
-						res.json('valid')
+						res.status(200).end('token: ' + token)
 					}
 					catch(err) {
 						console.log(err);
-						res.json(err)
+						res.status(500).json(err)
 					}
 				} else {
 					res.json('invalid')

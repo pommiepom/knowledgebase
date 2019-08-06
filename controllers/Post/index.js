@@ -7,7 +7,7 @@ exports.add = add = (props) => {
 		title: props.title,
 		detail: props.detail,
 		category: props.category,
-		createdTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+		date: moment().format('YYYY-MM-DD HH:mm:ss'),
 		lastUpdate: moment().format('YYYY-MM-DD HH:mm:ss')
 		// fileID: props.fileID
 	})
