@@ -31,33 +31,33 @@ $(function () {
         const files = $('#file').prop('files');
         if (files.length > 0) {
             API.get(`/posts/${post_id}/filenum`)
-            .then(res => {
-                const filenum = res.data.filenum
-                console.log('count ', filenum + files.length);
-                if (filenum + files.length < 6) {
-                    const promises = []
+                .then(res => {
+                    const filenum = res.data.filenum
+                    console.log('count ', filenum + files.length);
+                    if (filenum + files.length < 6) {
+                        const promises = []
 
-                    for (let i = 0; i < files.length; i++) {
-                        const formData = new FormData();
-                        formData.append('file', files[i])
-                        promises.push(API.patch(`/posts/${post_id}/file`, formData, config))
+                        for (let i = 0; i < files.length; i++) {
+                            const formData = new FormData();
+                            formData.append('file', files[i])
+                            promises.push(API.patch(`/posts/${post_id}/file`, formData, config))
+                        }
+
+                        Promise.all(promises.map(Reflect))
+                            .then(doc => {
+                                console.log(doc);
+                                // location.reload();
+                            })
+                            .catch(err => {
+                                console.error(err);
+                            })
+                    } else {
+                        console.log("can't upload over 5 files");
                     }
-
-                    Promise.all(promises)
-                        .then(doc => {
-                            console.log(doc);
-                            location.reload();
-                        })
-                        .catch(err => {
-                            console.error(err);
-                        })
-                } else {
-                    console.log("can't upload over 5 files");
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            })
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         }
     })
 
@@ -66,6 +66,7 @@ $(function () {
         const promises = []
 
         let fileID = [];
+
         $(':checkbox:checked').each(function (i) {
             fileID[i] = $(this).val();
         });
@@ -78,12 +79,11 @@ $(function () {
                     }
                 }))
             }
-    
-            Promise.all(promises)
+
+            Promise.all(promises.map(Reflect))
                 .then(doc => {
                     console.log(doc);
-    
-                    location.reload();
+                    // location.reload();
                 })
                 .catch(err => {
                     console.error(err);

@@ -12,13 +12,14 @@ router.post('/', (req, res) => {
 	Login.check(username)
 		.then(doc => {
 			if (doc != null) {
+				console.log("username: ", username);
 				console.log(doc);
-				console.log("pass: " + password)
-				console.log("passDB: " + doc.password)	
+				// console.log("pass: " + password)
+				// console.log("passDB: " + doc.password)	
 				if (password == doc.password){					
 					try {
-						let token = jwt.sign({ username: username, role: doc.role }, 'secret', { algorithm: 'HS512'})
-						res.cookie('jwt', token, { maxAge: 1000*60*30  *1000 })
+						const token = jwt.sign({ username: username, role: doc.role }, 'secret', { algorithm: 'HS512'})
+						res.cookie('jwt', token, { maxAge: 1000*60*30 })
 						res.status(200).end('token: ' + token)
 					}
 					catch(err) {

@@ -33,16 +33,4 @@ router.get('/:_id', (req, res) => {
 		})
 })
 
-// router.delete('/:_id', authen.user, (req, res) => {
-// 	const query = req.params
-// 	File.delandUpdate(query)
-// 		.then(doc => {
-// 			res.json(doc);
-// 		})
-// 		.catch(err => {
-// 			console.error(err)
-// 			res.status(500).json(err)
-// 		})
-// })
-
 module.exports = router

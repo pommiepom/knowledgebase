@@ -6,8 +6,10 @@ const multer = require('multer')
 const Post = require('../../../controllers/Post')
 const Like = require('../../../controllers/Like')
 const File = require('../../../controllers/File')
+const User = require('../../../controllers/User')
 const Comment = require('../../../controllers/Comment')
 const authen = require('../../../middlewares/Authentication')
+const getUsername = require('../../../libs/GetUsername')
 
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
@@ -52,12 +54,23 @@ router.get('/:_id', (req, res) => {
 
 router.post('/', authen.user, (req, res) => {
 	const props = req.body
-	Post.add(props)
+	const username = getUsername(req)
+
+	User.get_id(username)
 		.then(doc => {
-			res.json(doc)
-		}).catch(err => {
-			console.error(err)
-			res.status(500).json(err)
+			props.createdBy = doc._id
+
+			Post.add(props)
+				.then(doc => {
+					console.log(doc);
+					res.json(doc)
+				}).catch(err => {
+					console.error(err)
+					res.status(500).json(err)
+				})
+		})
+		.catch(err => {
+			console.log(err);
 		})
 })
 
@@ -169,7 +182,7 @@ router.get('/:_id/files', (req, res) => {
 
 router.patch('/:_id/file', authen.user, upload.single('file'), (req, res) => {
 	const query = req.params
-	const time = moment().format('YYYYMMDDHHmmSS')
+	const time = moment().format('YYYY-MM-DD HH:mm:ss')
 
 	File.add(req.file, time)
 		.then(file => {

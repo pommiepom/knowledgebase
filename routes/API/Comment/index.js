@@ -13,7 +13,7 @@ router.get('/', authen.admin, (req, res) => {
 		.then(doc => {
 			res.json(doc);
 		})
-		.catch( err => {
+		.catch(err => {
 			console.error(err)
 			res.status(500).json(err)
 		})
@@ -38,7 +38,8 @@ router.post('/', authen.user, (req, res) => {
 	Comment.add(props)
 		.then(doc => {
 			res.json(doc)
-		}).catch(err => {
+		})
+		.catch(err => {
 			console.error(err)
 			res.status(500).json(err)
 		})

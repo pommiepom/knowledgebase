@@ -18,9 +18,14 @@ exports.list = list = (query) => {
 }
 
 exports.update = update = (query, update) => {
-    return Users.findOneAndUpdate(query, { $set: update, lastUpdate: moment().format('YYYY-MM-DD HH:mm:ss') })
+    return Users.findOneAndUpdate(query, { $set: update, lastUpdate: moment().format('YYYY-MM-DD HH:mm:ss')}, { new: true })
 }
 
 exports.del = del = (query, update) => {
     return Users.findOneAndUpdate(query, { $set: update }, { new: true })    
+}
+
+exports.get_id = get_id = (username) => {
+    const query = { username: username }
+    return Users.findOne(query, '_id').exec()
 }
