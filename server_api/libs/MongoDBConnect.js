@@ -1,10 +1,12 @@
 // const config = require('config')
 const mongoose = require('mongoose');
+require('dotenv').config()
+
 
 let isConnectedBefore = false;
 
 module.exports = () => {
-    mongoose.connect('mongodb://localhost:27017/klb', {
+    mongoose.connect(mongo_klb, {
         useNewUrlParser: true
     });
 }

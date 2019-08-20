@@ -13,7 +13,8 @@ module.exports = {
     env_production: {
       NODE_ENV: 'production'
     }
-  }, {
+  }, 
+  {
     name: 'kbportal',
     script: './server_portal/index.js',
     instances: 1,

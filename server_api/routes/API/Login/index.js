@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+require('dotenv').config()
 
 const Login = require('../../../controllers/Login')
 
@@ -31,7 +32,7 @@ router.post('/', (req, res, next) => {
 					const token = jwt.sign({
 						username: username,
 						role: doc.role
-					}, 'secret', {
+					}, secret, {
 						algorithm: 'HS512'
 					})
 
