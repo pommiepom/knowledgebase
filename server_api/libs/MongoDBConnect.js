@@ -6,7 +6,7 @@ require('dotenv').config()
 let isConnectedBefore = false;
 
 module.exports = () => {
-    mongoose.connect(mongo_klb, {
+    mongoose.connect(process.env.mongo_klb, {
         useNewUrlParser: true
     });
 }

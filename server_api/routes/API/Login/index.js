@@ -32,7 +32,7 @@ router.post('/', (req, res, next) => {
 					const token = jwt.sign({
 						username: username,
 						role: doc.role
-					}, secret, {
+					}, process.env.secret, {
 						algorithm: 'HS512'
 					})
 

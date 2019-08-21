@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 mongoose.set('useFindAndModify', false);
+require('dotenv').config()
 
 const schema = Schema({
     reportedBy: {
@@ -33,7 +34,7 @@ const schema = Schema({
     },
     adminEmail: {
         type: String,
-        default: "admin@klb.com",
+        default: process.env.adminEmail,
         require: true
     }
 })
