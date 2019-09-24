@@ -6,23 +6,27 @@ const API = axios.create({
 $(function () {
 
     $('#newPost').on('click', function () {
-        const formData = new FormData($('form')[0]);
-        let data = {};
+        const files = $('#file').prop('files');
+        if (files.length < 6) {
+            const formData = new FormData($('form')[0]);
+            let data = {};
 
-        for (const [key, value] of formData.entries()) {
-            data[key] = value;
+            for (const [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            API.post('/posts', data)
+                .then(doc => {
+                    const postID = doc.data._id
+                    console.log(doc.data);
+                    addFile(postID)
+                    // window.location = "/public/file.html?post_id=" + postID
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        } else {
+            console.log("can't upload over 5 files");
         }
-
-        API.post('/posts', data)
-            .then(doc => {
-                console.log(doc);
-                const postID = doc.data._id
-                window.location = "/public/file.html?post_id=" + postID
-                // window.location = "/public/post/" + postID + "/file"
-            })
-            .catch(err => {
-                console.log(err);
-            })
-
     })
 })

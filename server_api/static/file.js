@@ -23,48 +23,12 @@ $(function () {
 
     // add file
     $('#addFile').on('click', () => {
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        };
-        const files = $('#file').prop('files');
-        if (files.length > 0) {
-            API.get(`/posts/${post_id}/filenum`)
-                .then(res => {
-                    const filenum = res.data.filenum
-                    console.log('count ', filenum + files.length);
-                    if (filenum + files.length < 6) {
-                        const promises = []
-
-                        for (let i = 0; i < files.length; i++) {
-                            const formData = new FormData();
-                            formData.append('file', files[i])
-                            promises.push(API.patch(`/posts/${post_id}/file`, formData, config))
-                        }
-
-                        Promise.all(promises.map(Reflect))
-                            .then(doc => {
-                                console.log(doc);
-                                // location.reload();
-                            })
-                            .catch(err => {
-                                console.error(err);
-                            })
-                    } else {
-                        console.log("can't upload over 5 files");
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-        }
+        addFile(post_id)
     })
 
     //del file
     $('#delFile').on('click', () => {
         const promises = []
-
         let fileID = [];
 
         $(':checkbox:checked').each(function (i) {
@@ -83,7 +47,6 @@ $(function () {
             Promise.all(promises.map(Reflect))
                 .then(doc => {
                     console.log(doc);
-                    // location.reload();
                 })
                 .catch(err => {
                     console.error(err);

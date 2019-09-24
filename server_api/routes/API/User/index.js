@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const moment = require('moment')
+const bcrypt = require('bcrypt');
 
 const User = require('../../../controllers/User')
 const Post = require('../../../controllers/Post')
@@ -30,8 +31,6 @@ router.get('/:_id', authen.user, (req, res, next) => {
 
 router.post('/', authen.admin, (req, res, next) => {
 	const props = req.body
-
-	const bcrypt = require('bcrypt');
 	const password = props.password
 
 	bcrypt.hash(password, 10, (err, hash) => {
@@ -53,11 +52,32 @@ router.patch('/:_id', authen.user, (req, res, next) => {
 	const query = req.params
 	const update = req.body
 
-	User.update(query, update)
-		.then(doc => {
-			res.json(doc);
+	const hashPassword = new Promise((resolve, reject) => {
+		if (update.hasOwnProperty("password")){
+			const password = update.password
+		
+			bcrypt.hash(password, 10, (err, hash) => {
+				if (err) {
+					throw new Error(err)
+				}
+		
+				update.password = hash
+				resolve(update)
+			});
+		}
+		else {
+			resolve(update)
+		}
+	});
+
+	hashPassword
+		.then((update) => {
+			User.update(query, update)
+				.then(doc => {
+					res.json(doc);
+				})
+				.catch(next)
 		})
-		.catch(next)
 })
 
 router.delete('/:_id', authen.admin, (req, res, next) => {

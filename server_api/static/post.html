@@ -1,6 +1,15 @@
 <script src="/axios/axios.min.js"></script>
 <script src="/jquery/jquery.min.js"></script>
 <script src="/public/post.js"></script>
+<script src="/public/addFile.js"></script>
+<script src="/library/Reflect.js"></script>
+
+<!-- <script type="text/javascript" src="/public/file.js"></script> -->
+
+<!-- <script type="module">
+    import addFile from "/public/file.js";
+</script> -->
+
 
 <h1>Post</h1>
 
@@ -15,6 +24,8 @@
         <option value="print">General > Printer</option>
         <option value="pro">General > Projector</option>
     </select><br><br>
+    Attachment:<br>
+    <input id="file" name="file" type="file" multiple="multiple"><br><br>
 
     <br><button id="newPost" type="button">NEW POST</button>
 </form>

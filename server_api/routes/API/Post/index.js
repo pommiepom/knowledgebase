@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const moment = require('moment');
 const multer = require('multer')
+require('dotenv').config()
 
 const Post = require('../../../controllers/Post')
 const Like = require('../../../controllers/Like')
@@ -13,7 +14,7 @@ const getUsername = require('../../../libs/GetUsername')
 
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		cb(null, 'D:/2562_1/knowledgebase/uploads')
+		cb(null, process.env.uploadFolder)
 	},
 	filename: function (req, file, cb) {
 		cb(null, file.originalname + '-' + moment().format('YYYYMMDDHHmmSS'))
