@@ -50,7 +50,7 @@ router.get('/:_id', (req, res, next) => {
 router.post('/', authen.user, (req, res, next) => {
 	const props = req.body
 	const username = getUsername(req)
-
+	
 	User.get_id(username)
 		.then(doc => {
 			props.createdBy = doc._id

@@ -35,11 +35,12 @@ router.post('/', (req, res, next) => {
 					}, process.env.secret, {
 						algorithm: 'HS512'
 					})
+					console.log('token', token)
 
-					res.cookie('jwt', token, {
-						maxAge: 1000 * 60 * 30
+					res.cookie('jwt', token)
+					res.status(200).json({
+						token
 					})
-					res.status(200).end('token: ' + token)
 				})
 				.catch(next)
 		})
