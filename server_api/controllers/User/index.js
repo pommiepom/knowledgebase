@@ -14,7 +14,7 @@ exports.add = add = (props) => {
 }
 
 exports.list = list = (query) => {
-    return Users.find(query).exec()
+    return Users.findOne(query).exec()
 }
 
 exports.update = update = (query, update) => {
