@@ -22,3 +22,7 @@ exports.list = list = (query) => {
 exports.del = del = (query) => {
     return Likes.deleteMany(query)    
 }
+
+exports.count = count = (query) => {
+	return Likes.countDocuments(query);
+}

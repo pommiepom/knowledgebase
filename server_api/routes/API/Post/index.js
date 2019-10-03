@@ -30,9 +30,19 @@ router.get('/', (req, res, next) => {
 		deleted: 0
 	}
 
-	Post.list(query)
-		.then(doc => {
+	const { limit, skip } = req.query || null
+
+	Post.list(query, Number(skip), Number(limit))
+	.then(doc => {
 			res.json(doc);
+		})
+		.catch(next)
+})
+
+router.get('/count', (req, res, next) => {
+	Post.count()
+		.then(num => {
+			res.json(num);
 		})
 		.catch(next)
 })

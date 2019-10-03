@@ -32,7 +32,7 @@ const postSchema = Schema({
 	},
 	fileID: [{
 		type: String,
-		ref: 'File'
+		// ref: 'File'
 	}],
 	deleted: {
 		type: Number,

@@ -14,9 +14,11 @@ exports.add = add = (props) => {
 	return post.save()
 }
 
-exports.list = list = (query) => {
-	return Posts.find(query).exec()
-	// .populate('createdBy')	
+exports.list = list = (query, skip, limit) => {
+	return Posts.find(query, null, { limit, skip })
+				.sort({date: 'desc'})
+				.populate('createdBy', 'username')	
+				.exec()
 }
 
 exports.update = update = (query, update) => {
@@ -25,4 +27,8 @@ exports.update = update = (query, update) => {
 
 exports.del = del = (query, update) => {
 	return Posts.findOneAndUpdate(query, { $set: update }, { new: true })    
+}
+
+exports.count = count = () => {
+	return Posts.countDocuments({ deleted: 0 });
 }

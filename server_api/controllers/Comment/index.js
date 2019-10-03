@@ -21,3 +21,7 @@ exports.list = list = (query) => {
 exports.del = del = (query, update) => {
 	return Comments.findOneAndUpdate(query, { $set: update }, { new: true })
 }
+
+exports.count = count = (query) => {
+	return Comments.countDocuments(query);
+}

@@ -14,6 +14,16 @@ router.get('/', authen.admin, (req, res, next) => {
 		.catch(next)
 })
 
+router.get('/count', (req, res, next) => {
+	const query = req.query
+	
+	Like.count(query)
+		.then(doc => {
+			res.json(doc);
+		})
+		.catch(next)
+})
+
 router.get('/:_id', authen.admin, (req, res, next) => {
 	const query = req.params
 
