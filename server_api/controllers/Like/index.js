@@ -26,3 +26,7 @@ exports.del = del = (query) => {
 exports.count = count = (query) => {
 	return Likes.countDocuments(query);
 }
+
+exports.checkLike = checkLike = (query) => {
+    return Likes.find(query).exec()
+}

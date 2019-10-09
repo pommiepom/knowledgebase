@@ -16,8 +16,13 @@ const fileSchema = Schema({
     expired_at: {
         type: Date,
         default: null
-      }
+    },
+    path: {
+        type: String,
+        default: null
+    }
 })
 
 fileSchema.index({ "expired_at": 1 }, { expireAfterSeconds: 0 });
+
 module.exports = mongoose.model('File', fileSchema)

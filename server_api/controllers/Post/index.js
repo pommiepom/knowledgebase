@@ -29,6 +29,6 @@ exports.del = del = (query, update) => {
 	return Posts.findOneAndUpdate(query, { $set: update }, { new: true })    
 }
 
-exports.count = count = () => {
-	return Posts.countDocuments({ deleted: 0 });
+exports.count = count = (query) => {
+	return Posts.countDocuments(query);
 }

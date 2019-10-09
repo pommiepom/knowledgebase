@@ -14,7 +14,7 @@ exports.add = add = (props) => {
 exports.list = list = (query) => {
 	return Comments.find(query)
 		// .populate('postID')
-		// .populate('createdBy')
+		.populate('createdBy', 'username')
 		.exec()
 }
 

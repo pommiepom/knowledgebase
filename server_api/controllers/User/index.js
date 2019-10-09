@@ -14,7 +14,7 @@ exports.add = add = (props) => {
 }
 
 exports.list = list = (query) => {
-    return Users.findOne(query).exec()
+    return Users.find(query).exec()
 }
 
 exports.update = update = (query, update) => {
@@ -26,6 +26,6 @@ exports.del = del = (query, update) => {
 }
 
 exports.get_id = get_id = (username) => {
-    const query = { username: username }
+    const query = { username }
     return Users.findOne(query, '_id').exec()
 }

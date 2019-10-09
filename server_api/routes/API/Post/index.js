@@ -40,7 +40,9 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/count', (req, res, next) => {
-	Post.count()
+	const query = { deleted: 0 }
+	
+	Post.count(query)
 		.then(num => {
 			res.json(num);
 		})
@@ -184,6 +186,22 @@ router.delete('/:_id/file', authen.user, (req, res, next) => {
 	File.delandUpdate(fileID, post_id)
 		.then(doc => {
 			res.json(doc);
+		})
+		.catch(next)
+})
+
+router.get('/:postID/checkuser', (req, res, next) => {
+	const username = getUsername(req)
+	const postID = req.params.postID
+
+	User.get_id(username)
+		.then(doc => {
+			const likedBy = doc._id
+			
+			return Like.checkLike({ postID, likedBy })
+		})
+		.then(doc => {
+			res.json(doc)
 		})
 		.catch(next)
 })

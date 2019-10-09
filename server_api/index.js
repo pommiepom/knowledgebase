@@ -21,7 +21,7 @@ app.use(cookieParser({
 
 app.use((req, res, next) => {
     console.log(req.method + " " + req.originalUrl)
-    console.log('cookies:', req.cookies)
+    // console.log('cookies:', req.cookies)
     next()
 })
 
