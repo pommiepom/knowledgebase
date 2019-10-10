@@ -4,7 +4,6 @@ const moment = require('moment')
 
 const Comment = require('../../../controllers/Comment')
 const Like = require('../../../controllers/Like')
-const User = require('../../../controllers/User')
 const authen = require('../../../middlewares/Authentication.js')
 const decode = require('../../../libs/Decode')
 

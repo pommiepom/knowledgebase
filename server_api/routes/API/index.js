@@ -12,6 +12,7 @@ router.use('/reports', require('./Report'))
 router.use('/likes', require('./Like'))
 router.use('/files', require('./File'))
 router.use('/login', require('./Login'))
+router.use('/categories', require('./Category'))
 
 router.get('/error/:code', (req, res) => {
     const err = new Error('error message')
@@ -24,9 +25,8 @@ router.use((err, req, res, next) => {
     if (err.statusCode) {
         statusCode = err.statusCode
     }
-    // if (req.is('application/json')) {
+
     if (req.headers['content-type'] && req.headers['content-type'].indexOf('application/json')>=0) {
-        // console.log(err);
         const {
             message,
             stack
