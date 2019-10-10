@@ -17,6 +17,7 @@ const authen = (role) => {
 		const decoded = jwt.verify(token, 'secret', {
 			algorithm: 'HS512'
 		})
+
 		if (decoded.role == 'admin') {
 			return next()
 		}

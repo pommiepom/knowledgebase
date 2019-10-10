@@ -1,11 +1,11 @@
 const Likes = require('../../models/Like')
 const moment = require('moment')
 
-exports.add = add = (props) => {
+exports.add = add = (props, userID) => {
     const like = new Likes({
         postID: props.postID,
         commentID: props.commentID,
-        likedBy: props.likedBy,
+        likedBy: userID,
         date: moment().format('YYYY-MM-DD HH:mm:ss'),
     })
     return like.save()

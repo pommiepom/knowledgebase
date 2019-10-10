@@ -10,7 +10,7 @@ const File = require('../../../controllers/File')
 const User = require('../../../controllers/User')
 const Comment = require('../../../controllers/Comment')
 const authen = require('../../../middlewares/Authentication')
-const getUsername = require('../../../libs/GetUsername')
+const decode = require('../../../libs/Decode')
 
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
@@ -61,14 +61,9 @@ router.get('/:_id', (req, res, next) => {
 
 router.post('/', authen.user, (req, res, next) => {
 	const props = req.body
-	const username = getUsername(req)
+	props.createdBy = decode(req)._id
 	
-	User.get_id(username)
-		.then(doc => {
-			props.createdBy = doc._id
-
-			return Post.add(props)
-		})
+	Post.add(props)
 		.then(doc => {
 			res.json(doc)
 		})
@@ -191,19 +186,14 @@ router.delete('/:_id/file', authen.user, (req, res, next) => {
 })
 
 router.get('/:postID/checkuser', (req, res, next) => {
-	const username = getUsername(req)
+	const likedBy = decode(req)._id
 	const postID = req.params.postID
 
-	User.get_id(username)
-		.then(doc => {
-			const likedBy = doc._id
-			
-			return Like.checkLike({ postID, likedBy })
-		})
+	Like.checkLike({ postID, likedBy })
 		.then(doc => {
 			res.json(doc)
 		})
 		.catch(next)
-})
+	})
 
 module.exports = router

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 const fs = require('fs')
+const mime = require('mime-types')
 
 const File = require('../../../controllers/File')
 const authen = require('../../../middlewares/Authentication.js')

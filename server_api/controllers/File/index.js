@@ -2,7 +2,7 @@ const Files = require('../../models/File')
 const Posts = require('../../models/Post')
 
 exports.add = add = (doc, time) => {
-	const file = { name: doc.filename, date: time }
+	const file = { name: doc.filename, date: time, path: doc.destination + '/' }
 
 	return Files.insertMany(file);
 }
