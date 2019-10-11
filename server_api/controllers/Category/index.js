@@ -8,7 +8,7 @@ exports.add = add = (props) => {
 }
 
 exports.list = list = () => {
-    return Categoryies.find().exec()
+    return Categoryies.find().sort({ name: 'asc' }).exec()
 }
 
 exports.update = update = (query, update) => {
