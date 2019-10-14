@@ -14,6 +14,7 @@ const authen = (role) => {
 		if (token.substring(0, 7) == "Bearer ") {
 			token = token.slice(7)
 		}
+		
 		const decoded = jwt.verify(token, 'secret', {
 			algorithm: 'HS512'
 		})

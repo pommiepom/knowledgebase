@@ -46,22 +46,13 @@ router.post('/', authen.user, (req, res, next) => {
 		.catch(next)
 })
 
-router.delete('/:_id', authen.user, (req, res, next) => {
-	const query = req.params
-
-	Like.del(query)
-		.then(doc => {
-			res.json(doc);
-		})
-		.catch(next)
-})
-
 router.delete('/commentID=:commentID', authen.user, (req, res, next) => {
 	const query = req.params
 	query.likedBy = decode(req)._id
 
 	Like.del(query)
 		.then(doc => {
+			console.log(doc);
 			res.json(doc);
 		})
 		.catch(next)
@@ -70,6 +61,16 @@ router.delete('/commentID=:commentID', authen.user, (req, res, next) => {
 router.delete('/postID=:postID', authen.user, (req, res, next) => {
 	const query = req.params
 	query.likedBy = decode(req)._id
+
+	Like.del(query)
+		.then(doc => {
+			res.json(doc);
+		})
+		.catch(next)
+})
+
+router.delete('/:_id', authen.user, (req, res, next) => {
+	const query = req.params
 
 	Like.del(query)
 		.then(doc => {
