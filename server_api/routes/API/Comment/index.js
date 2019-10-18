@@ -12,8 +12,9 @@ const decode = require('../../../libs/Decode')
 
 router.get('/', authen.admin, (req, res, next) => {
 	const query = { deleted: 0 }
+	const { limit, skip } = req.query || null
 
-	Comment.list(query)
+	Comment.list(query, Number(skip), Number(limit))
 		.then(doc => {
 			res.json(doc);
 		})

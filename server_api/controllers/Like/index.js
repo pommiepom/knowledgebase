@@ -13,9 +13,6 @@ exports.add = add = (props, userID) => {
 
 exports.list = list = (query) => {
     return Likes.find(query)
-                // .populate('postID')
-                // .populate('commentID')
-                // .populate('likedBy')
                 .exec()
 }
 

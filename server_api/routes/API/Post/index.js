@@ -120,10 +120,29 @@ router.delete('/:_id', authen.user, (req, res, next) => {
 router.get('/:postID/comments', (req, res, next) => {
 	const query = req.params
 	query.deleted = 0
+	const { limit, skip } = req.query || null
 
-	Comment.list(query)
-		// .populate('postID')
-		// .populate('createdBy')
+	Comment.list(query, Number(skip), Number(limit))
+		.then(doc => {
+			res.json(doc);
+		})
+		.catch(next)
+})
+
+router.get('/:postID/comments/count', (req, res, next) => {
+	const query = req.params
+	query.deleted = 0
+
+	Comment.count(query)
+		.then(doc => {
+			res.json(doc);
+		})
+		.catch(next)
+})
+
+router.get('/:postID/likes/count', (req, res, next) => {
+	const query = req.params
+	Like.count(query)
 		.then(doc => {
 			res.json(doc);
 		})
@@ -134,8 +153,6 @@ router.get('/:postID/likes', (req, res, next) => {
 	const query = req.params
 
 	Like.list(query)
-		// .populate('commentID')
-		// .populate('likedBy')
 		.then(doc => {
 			res.json(doc);
 		})

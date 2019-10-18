@@ -11,9 +11,9 @@ exports.add = add = (props) => {
 	return comment.save()
 }
 
-exports.list = list = (query) => {
-	return Comments.find(query)
-		// .populate('postID')
+exports.list = list = (query, skip, limit) => {
+	return Comments.find(query, null, { limit, skip })
+		.sort({date: 'asc'})
 		.populate('createdBy', 'username')
 		.exec()
 }

@@ -6,12 +6,23 @@ const bcrypt = require('bcrypt');
 const User = require('../../../controllers/User')
 const Post = require('../../../controllers/Post')
 const authen = require('../../../middlewares/Authentication')
+const decode = require('../../../libs/Decode')
 
 router.get('/', authen.admin, (req, res, next) => {
 	const query = {
 		deleted: 0
 	}
 
+	User.list(query)
+		.then(doc => {
+			res.json(doc);
+		})
+		.catch(next)
+})
+
+router.get('/signedIn', authen.user, (req, res, next) => {
+	const query = { _id: decode(req)._id }
+	
 	User.list(query)
 		.then(doc => {
 			res.json(doc);

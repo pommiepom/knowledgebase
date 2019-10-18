@@ -15,8 +15,18 @@ router.get('/', authen.admin, (req, res, next) => {
 		.catch(next)
 })
 
-router.get('/count', (req, res, next) => {
-	const query = req.query
+router.get('/post/:postID/count', (req, res, next) => {
+	const query = req.params
+	
+	Like.count(query)
+		.then(doc => {
+			res.json(doc);
+		})
+		.catch(next)
+})
+
+router.get('/comment/:commentID/count', (req, res, next) => {
+	const query = req.params
 	
 	Like.count(query)
 		.then(doc => {
@@ -46,7 +56,7 @@ router.post('/', authen.user, (req, res, next) => {
 		.catch(next)
 })
 
-router.delete('/commentID=:commentID', authen.user, (req, res, next) => {
+router.delete('/comment/:commentID', authen.user, (req, res, next) => {
 	const query = req.params
 	query.likedBy = decode(req)._id
 
@@ -58,7 +68,7 @@ router.delete('/commentID=:commentID', authen.user, (req, res, next) => {
 		.catch(next)
 })
 
-router.delete('/postID=:postID', authen.user, (req, res, next) => {
+router.delete('/post/:postID', authen.user, (req, res, next) => {
 	const query = req.params
 	query.likedBy = decode(req)._id
 

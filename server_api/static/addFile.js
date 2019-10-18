@@ -11,7 +11,6 @@ const addFile = (post_id) => {
 		API.get(`/posts/${post_id}/filenum`)
 			.then(res => {
 				const filenum = res.data.filenum
-				// console.log('count ', filenum + files.length);
 				if (filenum + files.length < 6) {
 					const promises = []
 
