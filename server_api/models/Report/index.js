@@ -14,15 +14,15 @@ const schema = Schema({
         ref: 'Post',
         require: true
     },
-    commentID: {
-        type: String, 
-        ref: 'Post',
-        require: true
-    },
-    issue: {
-        type: String,
-        require: true
-    },
+    // commentID: {
+    //     type: String, 
+    //     ref: 'Post',
+    //     require: true
+    // },
+    // issue: {
+    //     type: String,
+    //     require: true
+    // },
     description: {
         type: String,
         require: true
