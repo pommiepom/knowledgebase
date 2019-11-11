@@ -47,7 +47,7 @@ const getCreatedBy = (queryUser) => {
 router.get('/', (req, res, next) => {
 	const query = req.query
 	const date = {}
-	
+
 	Promise.all([getCreatedBy(query.fromUser)])
 		.then((vals) => {
 			if (vals[0]) {
@@ -57,9 +57,9 @@ router.get('/', (req, res, next) => {
 				return next()
 			}
 
-			if(query.title) {
+			if (query.title) {
 				query.title = {
-					$regex: new RegExp(queryTitle),
+					$regex: new RegExp(query.title),
 					$options: 'i'
 				}
 			}
@@ -71,19 +71,23 @@ router.get('/', (req, res, next) => {
 
 			if (query.toDate) {
 				const toDate = new Date(query.toDate)
-				date.$lt = toDate.setDate(toDate.getDate()+1)
+				date.$lt = toDate.setDate(toDate.getDate() + 1)
 				delete query.toDate
 			}
-			
-			const { limit, skip } = query || null
-			
-			query.date = date
+
+			const {
+				limit,
+				skip
+			} = query || null
+
+			if (date.length > 0) {
+				query.date = date
+			}
+
 			query.deleted = 0
 
 			delete query.limit
 			delete query.skip
-
-			console.log(query);
 
 			Post.list(query, Number(skip), Number(limit))
 				.then(doc => {
@@ -94,15 +98,52 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/count', (req, res, next) => {
-	const query = {
-		deleted: 0
-	}
+	const query = req.query
+	const date = {}
+
+	Promise.all([getCreatedBy(query.fromUser)])
+		.then((vals) => {
+			if (vals[0]) {
+				query.createdBy = vals[0]
+				delete query.fromUser
+			} else if (!vals[0] & query.fromUser)  {
+				return next()
+			}
+
+			if (query.title) {
+				query.title = {
+					$regex: new RegExp(query.title),
+					$options: 'i'
+				}
+			}
+
+			if (query.fromDate) {
+				date.$gte = new Date(query.fromDate)
+				delete query.fromDate
+			}
+
+			if (query.toDate) {
+				const toDate = new Date(query.toDate)
+				date.$lt = toDate.setDate(toDate.getDate() + 1)
+				delete query.toDate
+			}
+
+			if (date.length > 0) {
+				query.date = date
+			}
+
+			query.deleted = 0
+
+			delete query.limit
+			delete query.skip
 
 	Post.count(query)
 		.then(num => {
+			console.log(num);
 			res.json(num);
 		})
 		.catch(next)
+	})
 })
 
 router.get('/:_id', (req, res, next) => {
@@ -148,6 +189,7 @@ router.patch('/:_id', authen.user, (req, res, next) => {
 
 	Post.update(query, update)
 		.then(doc => {
+			console.log(doc);
 			res.json(doc);
 		})
 		.catch(next)
@@ -250,11 +292,21 @@ router.patch('/:_id/file', authen.user, upload.single('file'), (req, res, next) 
 		.catch(next)
 })
 
-router.delete('/:_id/file', authen.user, (req, res, next) => {
-	const post_id = req.params
-	const fileID = req.body.fileID
+router.delete('/:_id/file/:fileID', authen.user, (req, res, next) => {
+	const postID = req.params._id
+	const fileID = req.params.fileID
 
-	File.delandUpdate(fileID, post_id)
+	const fileDel = File.delandUpdate(fileID, postID)
+	const postUpdate = Post.update({
+		_id: postID
+	}, {
+		$pull: {
+			fileID: fileID
+		},
+		new: true
+	})
+
+	Promise.all([fileDel, postUpdate])
 		.then(doc => {
 			res.json(doc);
 		})
