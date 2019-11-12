@@ -3,6 +3,7 @@ const router = express.Router()
 
 const Report = require('../../../controllers/Report')
 const authen = require('../../../middlewares/Authentication.js')
+const decode = require('../../../libs/Decode')
 
 router.get('/', authen.admin, (req, res, next) => {
 	const query = null
@@ -24,8 +25,10 @@ router.get('/:_id', authen.admin, (req, res, next) => {
 		.catch(next)
 })
 
-router.post('/', authen.user, (req, res, next) => {
+router.post('/:postID', authen.user, (req, res, next) => {
 	const props = req.body
+	props.reportedBy = decode(req)._id
+	props.postID = req.params.postID
 
 	Report.add(props)
 		.then(doc => {
