@@ -22,7 +22,7 @@ router.get('/', authen.admin, (req, res, next) => {
 
 router.get('/signedIn', authen.user, (req, res, next) => {
 	const query = { _id: decode(req)._id }
-	
+
 	User.list(query)
 		.then(doc => {
 			res.json(doc);

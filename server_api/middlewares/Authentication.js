@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 const authen = (role) => {
 	return ((req, res, next) => {
@@ -15,7 +16,7 @@ const authen = (role) => {
 			token = token.slice(7)
 		}
 		
-		const decoded = jwt.verify(token, 'secret', {
+		const decoded = jwt.verify(token, process.env.secret, {
 			algorithm: 'HS512'
 		})
 

@@ -6,9 +6,10 @@ const authen = require('../../../middlewares/Authentication.js')
 const decode = require('../../../libs/Decode')
 
 router.get('/', authen.admin, (req, res, next) => {
-	const query = null
+	const query = req.query
+	const { limit, skip } = query || null
 
-	Report.list(query)
+	Report.list(Number(skip), Number(limit))
 		.then(doc => {
 			res.json(doc);
 		})
