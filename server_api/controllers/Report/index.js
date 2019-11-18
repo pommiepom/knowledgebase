@@ -11,6 +11,39 @@ exports.add = add = (props) => {
 	return report.save()
 }
 
+exports.count = count = () => {
+	return Reports.aggregate(
+		[{
+			$addFields: {
+				'post_id': {
+					'$toObjectId': '$postID'
+				}
+			}
+		}, {
+			$lookup: {
+				from: 'posts',
+				localField: 'post_id',
+				foreignField: '_id',
+				'as': 'post'
+			}
+		}, {
+			$unwind: {
+				'path': '$post'
+			}
+		}, {
+			$project: {
+				'postID': 1,
+				'post.deleted': 1,
+			}
+		}, {
+			$match: {
+				'post.deleted': 0
+			}
+		}, {
+			$count: 'reportedNum'
+	  }])
+}
+
 exports.list = list = (skip, limit) => {
 	return Reports.aggregate(
 		[{
@@ -57,7 +90,7 @@ exports.list = list = (skip, limit) => {
 				'post.deleted': 0
 			}
 		}, {
-			$limit: limit
+			$limit: limit + skip
 		}, {
 			$skip: skip
 		}])

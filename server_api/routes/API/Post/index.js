@@ -139,7 +139,6 @@ router.get('/count', (req, res, next) => {
 
 	Post.count(query)
 		.then(num => {
-			console.log(num);
 			res.json(num);
 		})
 		.catch(next)
