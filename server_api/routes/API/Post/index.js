@@ -154,7 +154,6 @@ router.get('/:_id', (req, res, next) => {
 
 	Post.list(query)
 		.then(doc => {
-			console.log("docdocdocdocdoc", doc);
 			res.json(doc);
 		})
 		.catch(next)
