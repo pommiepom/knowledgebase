@@ -147,9 +147,14 @@ router.get('/count', (req, res, next) => {
 
 router.get('/:_id', (req, res, next) => {
 	const query = req.params
+	
+	if(req.query) {
+		Object.assign(query, req.query)
+	}
 
 	Post.list(query)
 		.then(doc => {
+			console.log("docdocdocdocdoc", doc);
 			res.json(doc);
 		})
 		.catch(next)
