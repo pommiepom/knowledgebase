@@ -9,6 +9,7 @@ const authen = (role) => {
 		if (token == null) {
 			let err = new Error("null token");
 			err.statusCode = 401;
+
 			throw err
 		}
 

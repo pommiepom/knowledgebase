@@ -33,6 +33,7 @@ const getCreatedBy = (queryUser) => {
 				$options: 'i'
 			}
 		}
+
 		return User.list(username)
 			.then(doc => {
 				if (doc.length > 0) {
@@ -106,7 +107,7 @@ router.get('/count', (req, res, next) => {
 			if (vals[0]) {
 				query.createdBy = vals[0]
 				delete query.fromUser
-			} else if (!vals[0] & query.fromUser)  {
+			} else if (!vals[0] & query.fromUser) {
 				return next()
 			}
 
@@ -137,18 +138,18 @@ router.get('/count', (req, res, next) => {
 			delete query.limit
 			delete query.skip
 
-	Post.count(query)
-		.then(num => {
-			res.json(num);
+			Post.count(query)
+				.then(num => {
+					res.json(num);
+				})
+				.catch(next)
 		})
-		.catch(next)
-	})
 })
 
 router.get('/:_id', (req, res, next) => {
 	const query = req.params
-	
-	if(req.query) {
+
+	if (req.query) {
 		Object.assign(query, req.query)
 	}
 
@@ -189,16 +190,26 @@ router.patch('/:_id', authen.user, (req, res, next) => {
 		$set: req.body,
 		lastUpdate: lastUpdate
 	}
+	const user_id = decode(req)._id
 
-	Post.update(query, update)
+	return Post.list(query)
 		.then(doc => {
-			console.log(doc);
-			res.json(doc);
+			if (doc[0].createdBy._id == user_id) {
+				Post.update(query, update)
+					.then(doc => {
+						res.json(doc);
+					})
+					.catch(next)
+			} else {
+				let err = new Error("invalid");
+				err.statusCode = 401;
+				throw err
+			}
 		})
 		.catch(next)
 })
 
-router.delete('/:_id', authen.user, (req, res, next) => {
+router.delete('/:_id', authen.admin, (req, res, next) => {
 	const query = req.params
 	const query2 = {
 		postID: query._id
@@ -276,21 +287,32 @@ router.get('/:_id/files', (req, res, next) => {
 router.patch('/:_id/file', authen.user, upload.single('file'), (req, res, next) => {
 	const query = req.params
 	const time = moment().format('YYYY-MM-DD HH:mm:ss')
+	const user_id = decode(req)._id
 
-	File.add(req.file, time)
-		.then(file => {
-			const update = {
-				$push: {
-					fileID: file[0]._id
-				},
-				$set: {
-					lastUpdate: time
-				}
-			}
-			return Post.update(query, update)
-		})
+	return Post.list(query)
 		.then(doc => {
-			res.json(doc)
+			if (doc[0].createdBy._id == user_id) {
+				File.add(req.file, time)
+					.then(file => {
+						const update = {
+							$push: {
+								fileID: file[0]._id
+							},
+							$set: {
+								lastUpdate: time
+							}
+						}
+						return Post.update(query, update)
+					})
+					.then(doc => {
+						res.json(doc)
+					})
+					.catch(next)
+			} else {
+				let err = new Error("invalid");
+				err.statusCode = 401;
+				throw err
+			}
 		})
 		.catch(next)
 })
@@ -298,6 +320,7 @@ router.patch('/:_id/file', authen.user, upload.single('file'), (req, res, next) 
 router.delete('/:_id/file/:fileID', authen.user, (req, res, next) => {
 	const postID = req.params._id
 	const fileID = req.params.fileID
+	const user_id = decode(req)._id
 
 	const fileDel = File.delandUpdate(fileID, postID)
 	const postUpdate = Post.update({
@@ -309,9 +332,19 @@ router.delete('/:_id/file/:fileID', authen.user, (req, res, next) => {
 		new: true
 	})
 
-	Promise.all([fileDel, postUpdate])
+	return Post.list(query)
 		.then(doc => {
-			res.json(doc);
+			if (doc[0].createdBy._id == user_id) {
+				Promise.all([fileDel, postUpdate])
+					.then(doc => {
+						res.json(doc);
+					})
+					.catch(next)
+			} else {
+				let err = new Error("invalid");
+				err.statusCode = 401;
+				throw err
+			}
 		})
 		.catch(next)
 })
