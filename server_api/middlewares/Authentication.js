@@ -28,7 +28,7 @@ const authen = (role) => {
 			return next()
 		}
 
-		let err = new Error("invalid");
+		let err = new Error("Unauthorized");
 		err.statusCode = 401;
 		throw err
 	})

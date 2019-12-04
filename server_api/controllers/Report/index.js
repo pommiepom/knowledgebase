@@ -41,7 +41,7 @@ exports.count = count = () => {
 			}
 		}, {
 			$count: 'reportedNum'
-	  }])
+		}])
 }
 
 exports.list = list = (skip, limit) => {
@@ -94,4 +94,9 @@ exports.list = list = (skip, limit) => {
 		}, {
 			$skip: skip
 		}])
+}
+
+exports.listOne = listOne = (query) => {
+	return Reports.find(query)
+		.exec()
 }

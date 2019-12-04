@@ -171,7 +171,7 @@ router.post('/', authen.user, (req, res, next) => {
 		.catch(next)
 })
 
-router.get('/:_id/filenum', (req, res, next) => {
+router.get('/:_id/filenum', authen.user, (req, res, next) => {
 	const query = req.params
 
 	return Post.list(query)
@@ -257,6 +257,7 @@ router.get('/:postID/comments/count', (req, res, next) => {
 
 router.get('/:postID/likes/count', (req, res, next) => {
 	const query = req.params
+	
 	Like.count(query)
 		.then(doc => {
 			res.json(doc);
@@ -321,7 +322,8 @@ router.delete('/:_id/file/:fileID', authen.user, (req, res, next) => {
 	const postID = req.params._id
 	const fileID = req.params.fileID
 	const user_id = decode(req)._id
-
+	const query = { _id: postID }
+	
 	const fileDel = File.delandUpdate(fileID, postID)
 	const postUpdate = Post.update({
 		_id: postID
@@ -358,7 +360,7 @@ router.get('/:postID/checkuser', (req, res, next) => {
 			likedBy
 		})
 		.then(doc => {
-			res.json(doc)
+			res.json(doc.length > 0)
 		})
 		.catch(next)
 })

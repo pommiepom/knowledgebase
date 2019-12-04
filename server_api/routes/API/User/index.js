@@ -105,15 +105,4 @@ router.delete('/:_id', authen.admin, (req, res, next) => {
 		.catch(next)
 })
 
-router.get('/:createdBy/posts', authen.user, (req, res, next) => {
-	const query = req.params
-	query.deleted = 0
-
-	Post.list(query)
-		.then(doc => {
-			res.json(doc);
-		})
-		.catch(next)
-})
-
 module.exports = router

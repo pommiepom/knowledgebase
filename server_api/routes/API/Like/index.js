@@ -15,26 +15,6 @@ router.get('/', authen.admin, (req, res, next) => {
 		.catch(next)
 })
 
-router.get('/post/:postID/count', (req, res, next) => {
-	const query = req.params
-	
-	Like.count(query)
-		.then(doc => {
-			res.json(doc);
-		})
-		.catch(next)
-})
-
-router.get('/comment/:commentID/count', (req, res, next) => {
-	const query = req.params
-	
-	Like.count(query)
-		.then(doc => {
-			res.json(doc);
-		})
-		.catch(next)
-})
-
 router.get('/:_id', authen.admin, (req, res, next) => {
 	const query = req.params
 
@@ -79,14 +59,14 @@ router.delete('/post/:postID', authen.user, (req, res, next) => {
 		.catch(next)
 })
 
-// router.delete('/:_id', authen.user, (req, res, next) => {
-// 	const query = req.params
+router.delete('/:_id', authen.user, (req, res, next) => {
+	const query = req.params
 
-// 	Like.del(query)
-// 		.then(doc => {
-// 			res.json(doc);
-// 		})
-// 		.catch(next)
-// })
+	Like.del(query)
+		.then(doc => {
+			res.json(doc);
+		})
+		.catch(next)
+})
 
 module.exports = router

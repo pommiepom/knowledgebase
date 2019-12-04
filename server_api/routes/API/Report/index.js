@@ -7,7 +7,8 @@ const decode = require('../../../libs/Decode')
 
 router.get('/', authen.admin, (req, res, next) => {
 	const query = req.query
-	const { limit, skip } = query || null
+	const limit = query.limit ? query.limit : Number.MAX_SAFE_INTEGER
+	const skip = query.skip ? query.skip : 0
 
 	Report.list(Number(skip), Number(limit))
 		.then(doc => {
@@ -27,7 +28,7 @@ router.get('/count', authen.admin, (req, res, next) => {
 router.get('/:_id', authen.admin, (req, res, next) => {
 	const query = req.params
 
-	Report.list(query)
+	Report.listOne(query)
 		.then(doc => {
 			res.json(doc);
 		})

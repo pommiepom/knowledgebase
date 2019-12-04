@@ -7,25 +7,10 @@ const Like = require('../../../controllers/Like')
 const authen = require('../../../middlewares/Authentication.js')
 const decode = require('../../../libs/Decode')
 
-// const debug = require('debug')
-// const logger = debug('route:api:comment')
-
 router.get('/', authen.admin, (req, res, next) => {
 	const query = { deleted: 0 }
-	const { limit, skip } = req.query || null
 
-	Comment.list(query, Number(skip), Number(limit))
-		.then(doc => {
-			res.json(doc);
-		})
-		.catch(next)
-})
-
-router.get('/count', (req, res, next) => {
-	const query = req.query
-	query.deleted = 0
-
-	Comment.count(query)
+	Comment.list(query, null, null)
 		.then(doc => {
 			res.json(doc);
 		})
@@ -53,7 +38,7 @@ router.post('/', authen.user, (req, res, next) => {
 		.catch(next)
 })
 
-router.get('/:commentID/likes', (req, res, next) => {
+router.get('/:commentID/likes', authen.admin, (req, res, next) => {
 	const query = req.params
 	query.deleted = 0
 
@@ -64,7 +49,17 @@ router.get('/:commentID/likes', (req, res, next) => {
 		.catch(next)
 })
 
-router.delete('/:_id', authen.user, (req, res, next) => {
+router.get('/:commentID/likes/count', (req, res, next) => {
+	const query = req.params
+	
+	Like.count(query)
+		.then(doc => {
+			res.json(doc);
+		})
+		.catch(next)
+})
+
+router.delete('/:_id', authen.admin, (req, res, next) => {
 	const query = req.params
 	const update = { deleted: 1, delDate: moment().format('YYYY-MM-DD HH:mm:ss')}
 
@@ -75,15 +70,13 @@ router.delete('/:_id', authen.user, (req, res, next) => {
 		.catch(next)
 })
 
-// logger('/:commentID/checkuser')
-// logger('/:commentID/checkuser response Like.checkLike({ commentID, likedBy }) json')
 router.get('/:commentID/checkuser', (req, res, next) => {
 	const likedBy = decode(req)
 	const commentID = req.params.commentID
 
 	Like.checkLike({ commentID, likedBy })
 		.then(doc => {
-			res.json(doc)
+			res.json(doc.length > 0)
 		})
 		.catch(next)
 })
